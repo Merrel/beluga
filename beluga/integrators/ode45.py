@@ -9,7 +9,7 @@ def ode_wrap(func,*args):   # Required for odeint
 def ode45(f,tspan,y0,*args,**kwargs):
     """Implements interface similar to MATLAB's ode45 using scipy"""
 
-    #return ode45_old(f,tspan,y0,*args,**kwargs)
+    return ode45_old(f,tspan,y0,*args,**kwargs)
 
     # if len(tspan) == 2:
     #     # TODO: Change hardcoding?
@@ -220,7 +220,7 @@ def ode45_old(vfun, vslot, vinit, *args, **kwargs):
         # Estimate the six results using this solver
         vthetime = vtimestamp
         vtheinput = vu
-        
+
         vk[0] = vfun(vthetime, vtheinput, *args)
         for j in range(1, 6):
             vthetime = vtimestamp + vc[j - 1] * vstepsize

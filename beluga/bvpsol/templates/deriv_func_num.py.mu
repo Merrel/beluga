@@ -53,5 +53,3 @@ def deriv_func(_t,_X,_p,_aux):
     Xdot = np.append(Xdot, 0)
 
     return tf*(Xdot)
-
-

@@ -22,12 +22,19 @@ import pystache
 
 import simplepipe as sp
 import math
+from math import exp as exp2
 
 def make_njit_fn(args, fn_expr):
     fn_str = lambdastr(args, fn_expr).replace('MutableDenseMatrix', '')\
                                                   .replace('(([[', '[') \
                                                   .replace(']]))', ']')
-    jit_fn = numba.njit(parallel=True)(eval(fn_str))
+    @numba.njit
+    def exp(x):
+        x = min(100, max(-100, x))
+        return exp2(x)
+    from math import sin, cos, tan, atan, asin, acos, sqrt
+
+    jit_fn = numba.njit(parallel=True)(eval(fn_str, locals()))
     return jit_fn
 
 def make_sympy_fn(args, fn_expr):
@@ -287,15 +294,19 @@ class MultipleShooting(BaseAlgorithm):
         self.saved_code = False
 
         self.out_ws = out_ws
-        # self.stm_ode_func = self.make_stmode(out_ws['deriv_func_fn'], problem_data['nOdes'])
-        self.bvp = BVP(out_ws['deriv_func_fn'],
-                       out_ws['bc_func_fn'], out_ws['compute_control_fn'])#out_ws['compute_control_fn'])
-
-        # self.stm_ode_func = ft.partial(self._stmode_fd, odefn=self.bvp.deriv_func)
-        self.stm_ode_func = self.make_stmode(self.bvp.deriv_func, problem_data['nOdes'])
-        self.bc_jac_multi  = ft.partial(self.__bc_jac_multi, bc_func=self.bvp.bc_func)
+        self.set_eoms(out_ws['deriv_func_fn'],
+                       out_ws['bc_func_fn'], out_ws['compute_control_fn'],
+                       problem_data['nOdes'])
         sys.modules['_beluga_'+problem_data['problem_name']] = out_ws['code_module']
         return out_ws['code_module']
+
+        # self.stm_ode_func = self.make_stmode(out_ws['deriv_func_fn'], problem_data['nOdes'])
+    def set_eoms(self, deriv, bc, control, nOdes):
+        self.bvp = BVP(deriv, bc, control)#out_ws['compute_control_fn'])
+
+        # self.stm_ode_func = ft.partial(self._stmode_fd, odefn=self.bvp.deriv_func)
+        self.stm_ode_func = self.make_stmode(self.bvp.deriv_func, nOdes)
+        self.bc_jac_multi  = ft.partial(self.__bc_jac_multi, bc_func=self.bvp.bc_func)
 
     def bc_jac_params():
         P = np.zeros((nBCs, p.size))
@@ -409,7 +420,7 @@ class MultipleShooting(BaseAlgorithm):
         deriv_func = self.bvp.deriv_func
         bc_func = self.bvp.bc_func
 
-        aux = solinit.aux
+        aux = solinit.aux # {'const': {}}
         const =[np.float64(_) for _ in aux['const'].values()]
         # Only the start and end times are required for ode45
         arcs = solinit.arcs

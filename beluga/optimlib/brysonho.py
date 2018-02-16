@@ -224,6 +224,8 @@ def make_control_law(dhdu, controls):
         logging.info("Attempting using SymPy ...")
         logging.debug("dHdu = "+str(dhdu))
         ctrl_sol = sympy.solve(dhdu, var_list, dict=True)
+        #from beluga.utils_old.pythematica import mathematica_solve
+        #var_sol = mathematica_solve(dhdu,var_list)
 
         # raise ValueError() # Force mathematica
     except ValueError as e:  # FIXME: Use right exception name here
@@ -241,6 +243,7 @@ def make_control_law(dhdu, controls):
     #                         for (ctrl,expr) in option.items()]
     #                         for option in ctrl_sol]
     control_options = ctrl_sol
+    #control_options = [{"alpha": "atan(lamGAM/(v*lamV))"}, {"alpha": "pi+atan(lamGAM/(v*lamV))"}]
     return control_options
 
 def process_constraint(s,

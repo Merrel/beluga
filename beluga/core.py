@@ -88,20 +88,20 @@ def solve(ocp, method, bvp_algorithm, steps, guess_generator, output_file='data.
 
     solinit = Solution()
 
-    solinit.aux['const'] = dict((str(const.name),float(const.value))
+    solinit.aux['const'] = dict((str(const.name),float(const.value)) #{}
                                 for const in ocp_ws['constants'])
-    solinit.aux['parameters'] = ocp_ws['problem_data']['parameter_list']
+    solinit.aux['parameters'] = ocp_ws['problem_data']['parameter_list'] #[]
 
     # For path constraints
-    solinit.aux['constraint'] = cl.defaultdict(float)
-    solinit.aux['constraints'] = dict((s['name'], {'unit':str(s['unit']),
+    solinit.aux['constraint'] = cl.defaultdict(float) # {}
+    solinit.aux['constraints'] = dict((s['name'], {'unit':str(s['unit']), #{}
                                                    'expr':str(s['expr']),
                                                    'direction': s['direction'],
                                                    'arc_type': i,
                                                    'pi_list':[str(_) for _ in s['pi_list']]})
                                       for i, s in enumerate(ocp_ws['problem_data']['s_list'],1))
-    solinit.aux['arc_seq'] = (0,)
-    solinit.aux['pi_seq'] = (None,)
+    solinit.aux['arc_seq'] = (0,) #donot touch
+    solinit.aux['pi_seq'] = (None,) #donot touch
     bvp_fn = bvp_algorithm.preprocess(ocp_ws['problem_data'])
     # The initial guess is automatically stored in the bvp object
     # solinit is just a reference to it

@@ -1,5 +1,13 @@
 import numpy as np
 from math import *
+from numpy import exp as exp2
+
+# def exp(x):
+#     if x>100:
+#         x=100
+#     elif x<-100:
+#         x=-100
+#     return exp2(x)
 
 def compute_hamiltonian(t, X, p, aux, u):
     # C = [v for k,v in aux['const'].items()]
@@ -20,9 +28,8 @@ def compute_control(_t, _X, _p, _aux, arc_idx=None):
         return np.array([0]*{{num_controls}})
 
 
-
-
 def deriv_func_nojit(_t, _X, _p, _aux, arc_idx=None):
+    # _X=_X.astype(np.longdouble)
     _arc_seq = _aux.get('arc_seq', (0,))
     _pi_seq = _aux.get('pi_seq',(None,))
     if arc_idx is None:
@@ -32,6 +39,8 @@ def deriv_func_nojit(_t, _X, _p, _aux, arc_idx=None):
     {{#state_list}}{{.}},{{/state_list}} = _X[:{{num_states}}]
     tf = abs(tf)
     _X[{{num_states}}-1] = tf
+
+    t = tf*_t
     u_ = compute_control(_t,_X,_p,_aux, arc_idx)
 
     {{#control_list}}{{.}},{{/control_list}} = u_
@@ -57,6 +66,6 @@ def deriv_func_nojit(_t, _X, _p, _aux, arc_idx=None):
                    {{/eom}}]
 {{/costate_eoms}}
 
-    return np.hstack((state_eom, lam_eom, [0]))
+    return np.hstack((state_eom, lam_eom, [0])).astype(np.float64)
 
 deriv_func_ode45 = deriv_func_nojit

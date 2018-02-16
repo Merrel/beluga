@@ -6,6 +6,7 @@ Contains class/functions related to defining the optimal control problems.
 
 import scipy.optimize
 import numpy as np
+from numpy import float128
 import dill
 
 import json

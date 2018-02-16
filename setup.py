@@ -49,9 +49,9 @@ setup(name="beluga",
         "numexpr",
         "pystache",
         "docopt",
-	"simplepipe",
+	    "simplepipe",
         "multiprocessing_on_dill",
-#        "toyplot",
-#        "PyQt5",
+        "toyplot",
+        "PyQt5",
       ]
       )

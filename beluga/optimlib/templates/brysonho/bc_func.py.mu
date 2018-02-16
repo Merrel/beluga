@@ -3,6 +3,17 @@ from math import *
 import itertools as it
 from beluga.utils import keyboard
 np.set_printoptions(suppress=True, precision=4)
+from math import exp as exp2
+import numba
+
+@numba.njit
+def exp(x):
+    if x>200:
+        x=200
+    elif x<-200:
+        x=-200
+    return exp2(x)
+
 
 def bc_func_left(_ya, _p, _aux, _arc_seq, _pi_seq):
     arc_type = _arc_seq[0]
