@@ -47,8 +47,8 @@ bvp.solution.y = x.T
 bvp.solution.parameters = param_guess
 
 n = 100
-hConts = numpy.linspace(x[-1][3],0,n)
-sConts = numpy.linspace(x[-1][4],250/6378.137,n)
+hConts = numpy.linspace(x[-1][2],0,n)
+sConts = numpy.linspace(x[-1][3],250/6378.137,n)
 
 solver = MultipleShooting(tolerance=1e-3, max_iterations=100, max_error=100, derivative_method='fd', cache_dir = None,verbose=True,cached=True,number_arcs=1)
 
