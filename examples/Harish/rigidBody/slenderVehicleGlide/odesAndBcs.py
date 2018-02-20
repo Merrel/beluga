@@ -217,7 +217,7 @@ def bcs(Ya, Yb, params, aux):
     lamw = Yb[11]
     lamc = Yb[12]
 
-    Xdot = odes(1, Yb, params, hCont, sCont, epsi, flag)
+    Xdot = odes(1, Yb, params, aux)
 
     u = fsolve(controlFun, 0.1, args=(Yb, tf, epsi), fprime=None, full_output=0, \
     col_deriv=0, xtol=1.49012e-03, maxfev=0, band=None, epsfcn=None, factor=100, diag=None)

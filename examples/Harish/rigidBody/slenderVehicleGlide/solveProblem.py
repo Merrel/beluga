@@ -1,4 +1,5 @@
 from math import *
+import numpy
 from odesAndBcs import *
 import beluga.bvpsol.BVP as BVP
 from beluga.utils import ode45
@@ -36,6 +37,8 @@ bvp.solution.aux = aux
 
 tspan = [0, 1]
 
+#print(bcs(x0,x0,params,aux))
+
 [t,x] = ode45(bvp.deriv_func,tspan,x0,param_guess,bvp.solution.aux)
 #[t,x] = ode45(odes,tspan,x0,param_guess,hCont, sCont, epsi, flag)
 
@@ -47,9 +50,9 @@ n = 100
 hConts = numpy.linspace(x[-1][3],0,n)
 sConts = numpy.linspace(x[-1][4],250/6378.137,n)
 
-solver = MultipleShooting(tolerance=1e-6, max_iterations=100, max_error=100, derivative_method='fd', cache_dir = None,verbose=False,cached=True,number_arcs=4)
+solver = MultipleShooting(tolerance=1e-3, max_iterations=100, max_error=100, derivative_method='fd', cache_dir = None,verbose=True,cached=True,number_arcs=1)
 
-for idx in range(n):
+for idx in range(1):
     bvp.solution.aux[0] = hConts[idx]
     bvp.solution.aux[1] = sConts[idx]
     sol = solver.solve(bvp)
@@ -58,3 +61,7 @@ for idx in range(n):
 
 #XDots = odes(tau,states,params,hCont, sCont, epsi, flag)
 #print(x)
+
+
+#y0g = [bvp.solution.y[:,int(numpy.floor(i/2*x.shape[0]))] for i in range(2)]
+#print(y0g)
