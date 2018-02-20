@@ -50,7 +50,7 @@ n = 100
 hConts = numpy.linspace(x[-1][2],0,n)
 sConts = numpy.linspace(x[-1][3],250/6378.137,n)
 
-solver = MultipleShooting(tolerance=1e-3, max_iterations=100, max_error=100, derivative_method='fd', cache_dir = None,verbose=True,cached=True,number_arcs=1)
+solver = MultipleShooting(tolerance=1e-3, max_iterations=100, max_error=10000, derivative_method='fd', cache_dir = None,verbose=True,cached=True,number_arcs=4)
 
 for idx in range(1):
     bvp.solution.aux[0] = hConts[idx]
