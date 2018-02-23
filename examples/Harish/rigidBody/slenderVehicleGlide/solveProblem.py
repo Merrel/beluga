@@ -22,8 +22,8 @@ lamc0 = -0.1
 
 tf = 0.1
 
-x0 = numpy.array([v0,gam0,h0,s0,theta0,w0,c0,lamv0,lamgam0,lamh0,lams0,lamtheta0,lamw0,lamc0,tf])
-param_guess = numpy.array([])
+x0 = numpy.array([v0,gam0,h0,s0,theta0,w0,c0,lamv0,lamgam0,lamh0,lamtheta0,lamw0,lamc0])
+param_guess = numpy.array([tf,lams0])
 hCont = 100
 sCont = 10
 flag = 1
@@ -38,10 +38,9 @@ bvp.solution.aux = aux
 tspan = [0, 1]
 
 #print(bcs(x0,x0,params,aux))
-print('Starting initial guess')
+
 [t,x] = ode45(bvp.deriv_func,tspan,x0,param_guess,bvp.solution.aux)
 #[t,x] = ode45(odes,tspan,x0,param_guess,hCont, sCont, epsi, flag)
-print('Initial guess generated')
 
 bvp.solution.x = t
 bvp.solution.y = x.T
@@ -51,40 +50,11 @@ n = 100
 hConts = numpy.linspace(x[-1][2],0,n)
 sConts = numpy.linspace(x[-1][3],250/6378.137,n)
 
-solver = MultipleShooting(tolerance=1e-3, max_iterations=100, max_error=10000, derivative_method='fd', cache_dir = None,verbose=True,cached=True,number_arcs=1)
+solver = MultipleShooting(tolerance=1e-3, max_iterations=100, max_error=10000, derivative_method='fd', cache_dir = None,verbose=True,cached=True,number_arcs=4)
 
-for idx in range(n):
+for idx in range(1):
     bvp.solution.aux[0] = hConts[idx]
     bvp.solution.aux[1] = sConts[idx]
-    sol = solver.solve(bvp)
-    bvp.solution = sol
-    print(idx)
-
-hConts = numpy.linspace(bvp.solution.y[2][-1],0,n)
-bvp.solution.aux[3] = 2
-
-for idx in range(n):
-    bvp.solution.aux[0] = hConts[idx]
-    bvp.solution.aux[1] = sConts[-1]
-    sol = solver.solve(bvp)
-    bvp.solution = sol
-    print(idx)
-
-sConts = numpy.linspace(250/6378.137,450/6378.137,n)
-
-for idx in range(n):
-    bvp.solution.aux[0] = hConts[-1]
-    bvp.solution.aux[1] = sConts[idx]
-    sol = solver.solve(bvp)
-    bvp.solution = sol
-    print(idx)
-
-epsi = numpy.linspace(1,0.001,n)
-
-for idx in range(n):
-    bvp.solution.aux[0] = hConts[-1]
-    bvp.solution.aux[1] = sConts[-1]
-    bvp.solution.aux[2] = epsi[idx]
     sol = solver.solve(bvp)
     bvp.solution = sol
     print(idx)
