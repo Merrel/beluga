@@ -40,7 +40,7 @@ def odes(tau, states, params, aux):
     R = 6378137.0
 
     k = 1.74153e-4
-    QStar = 1e200
+    QStar = (8.5883e6)/3
 
     rho0 = 1.225
     HScale = 8500.0
@@ -282,7 +282,7 @@ def controlFun(u,states, t, epsi):
     R = 6378137.0
 
     k = 1.74153e-4
-    QStar = 1e200#(8.5883e6)/3;
+    QStar = (8.5883e6)/3
 
     rho0 = 1.225
     HScale = 8500
