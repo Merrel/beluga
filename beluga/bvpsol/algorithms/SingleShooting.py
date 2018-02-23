@@ -248,7 +248,7 @@ class SingleShooting(Algorithm):
                 phi = np.reshape(yf[nOdes:],(nOdes, nOdes)) # STM
                 # Evaluate the boundary conditions
                 res = bc_func(y0g, yb, paramGuess, aux)
-                print(res)
+                # print(res)
                 r1 = np.linalg.norm(res)
                 if r1 > self.max_error:
                     logging.warn('Error exceeded max_error')
