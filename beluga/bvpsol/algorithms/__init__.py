@@ -1,7 +1,11 @@
 from .BaseAlgorithm import BaseAlgorithm
 from .SingleShooting import SingleShooting
 from .MultipleShooting import MultipleShooting
+<<<<<<< HEAD
 #from .ParallelShooting import ParallelShooting
+=======
+# from .ParallelShooting import ParallelShooting
+>>>>>>> 92b7b072cc27b9f885657409574b9c517be61bb0
 #from .MultipleShooting_mike import MultipleShooting_mike
 from .QCPI import QCPI
 # from .QCPI_Parallel import QCPI_Parallel
